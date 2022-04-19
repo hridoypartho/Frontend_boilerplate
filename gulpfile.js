@@ -7,7 +7,7 @@ const browserSync = require('browser-sync'),
     imagemin = require('gulp-imagemin'),
     nunjucksRender = require('gulp-nunjucks-render'),
     plumber = require('gulp-plumber'),
-    stylus = require('gulp-stylus'),
+    scss = require('gulp-sass'),
     terser = require('gulp-terser'),
     argv = require('yargs').argv,
     gulpif = require('gulp-if'),
@@ -17,7 +17,7 @@ const browserSync = require('browser-sync'),
 const paths = {
     source: {
         html: ['app/*.html'],
-        styles: ["app/stylus/main.styl"],
+        scss: ["app/scss/main.scss"],
         scripts: ['app/javascript/**/*.js'],
         images: ['app/images/**/*.{jpg,png,gif}']
     },
@@ -27,13 +27,13 @@ const paths = {
     },
     production: {
         html: 'public/',
-        styles: "public/css",
+        scss: "public/css",
         scripts:'public/js',
         images: 'public/images'
     },
     development: {
         html:   'build/',
-        styles: "build/css",
+        scss: "build/css",
         scripts:'build/js',
         images: 'build/images'
     },
@@ -63,14 +63,14 @@ gulp.task('nunjucks', done => {
 });
 /*
 |--------------------------------------------------------------------------
-| Stylus Tasks
+| scss Tasks
 |--------------------------------------------------------------------------
 */
-gulp.task('stylus', done => {
-    gulp.src(paths.source.styles)
+gulp.task('scss', done => {
+    gulp.src(paths.source.scss)
     .pipe(plumber())
-    .pipe(gulpif(isProduction, stylus({ compress: true }), stylus()))
-    .pipe(gulp.dest(paths[environment].styles));
+    .pipe(gulpif(isProduction, scss({ compress: true }), scss()))
+    .pipe(gulp.dest(paths[environment].scss));
     done();
 });
 /*
@@ -109,7 +109,7 @@ gulp.task('images', (done) => {
 */
 gulp.task('watch', done => {
     gulp.watch(paths.source.html.concat(paths.views.source), gulp.parallel('nunjucks'));
-    gulp.watch(paths.source.styles, gulp.parallel('stylus'));
+    gulp.watch(paths.source.scss, gulp.parallel('scss'));
     gulp.watch(paths.source.scripts, gulp.parallel('javascript'));
     gulp.watch(paths.source.images, gulp.parallel('images'));
     done();
@@ -139,10 +139,10 @@ gulp.task('browser-sync', done => {
 | default task
 |--------------------------------------------------------------------------
 */
-gulp.task('default', gulp.series('nunjucks', 'stylus', 'javascript', 'images', 'watch', 'browser-sync'));
+gulp.task('default', gulp.series('nunjucks', 'scss', 'javascript', 'images', 'watch', 'browser-sync'));
 /*
 |--------------------------------------------------------------------------
 | deploy
 |--------------------------------------------------------------------------
 */
-gulp.task('build', gulp.series('nunjucks', 'stylus', 'javascript', 'images'));
+gulp.task('build', gulp.series('nunjucks', 'scss', 'javascript', 'images'));
