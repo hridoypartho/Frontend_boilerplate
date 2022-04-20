@@ -18,7 +18,7 @@ const paths = {
     source: {
         html: ['app/*.html'],
         scss: ["app/scss/main.scss"],
-        scripts: ['app/javascript/**/*.js'],
+        scripts: ['app/js/**/*.js'],
         images: ['app/images/**/*.{jpg,png,gif}']
     },
     views: {
@@ -78,7 +78,7 @@ gulp.task('scss', done => {
 | Uglify and Concat JS
 |--------------------------------------------------------------------------
 */
-gulp.task('javascript', () => {
+gulp.task('js', () => {
     return gulp.src(paths.source.scripts)
     .pipe(plumber())
     .pipe(gulpif(isProduction, terser()))
@@ -110,7 +110,7 @@ gulp.task('images', (done) => {
 gulp.task('watch', done => {
     gulp.watch(paths.source.html.concat(paths.views.source), gulp.parallel('nunjucks'));
     gulp.watch(paths.source.scss, gulp.parallel('scss'));
-    gulp.watch(paths.source.scripts, gulp.parallel('javascript'));
+    gulp.watch(paths.source.scripts, gulp.parallel('js'));
     gulp.watch(paths.source.images, gulp.parallel('images'));
     done();
 });
@@ -139,10 +139,10 @@ gulp.task('browser-sync', done => {
 | default task
 |--------------------------------------------------------------------------
 */
-gulp.task('default', gulp.series('nunjucks', 'scss', 'javascript', 'images', 'watch', 'browser-sync'));
+gulp.task('default', gulp.series('nunjucks', 'scss', 'js', 'images', 'watch', 'browser-sync'));
 /*
 |--------------------------------------------------------------------------
 | deploy
 |--------------------------------------------------------------------------
 */
-gulp.task('build', gulp.series('nunjucks', 'scss', 'javascript', 'images'));
+gulp.task('build', gulp.series('nunjucks', 'scss', 'js', 'images'));

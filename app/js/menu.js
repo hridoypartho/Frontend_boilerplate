@@ -103,7 +103,3 @@ window.onload = function () {
     });
   }
 };
-
-let print = "Hey, it works!";
-
-console.log(print);
