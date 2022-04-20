@@ -23,7 +23,7 @@ const paths = {
     },
     views: {
         templates: 'app/views/',
-        source: 'app/views/**/*.html'
+        source: 'app/views/**/*.njk'
     },
     production: {
         html: 'public/',
